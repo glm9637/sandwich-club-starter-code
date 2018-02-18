@@ -11,28 +11,32 @@ import java.util.ArrayList;
 public class JsonUtils {
 
     public static Sandwich parseSandwichJson(String json) {
-        Sandwich result = new Sandwich();
+        Sandwich result = null;
         try {
-            JSONObject jsBase= new JSONObject(json);
+            JSONObject jsBase = new JSONObject(json);
             JSONObject jsName = jsBase.getJSONObject("name");
             JSONArray jsAlias = jsName.getJSONArray("alsoKnownAs");
             JSONArray jsIngredient = jsBase.getJSONArray("ingredients");
-            result.setMainName(jsName.getString("mainName"));
+
+            String mainName = jsName.getString("mainName");
+            String placeOfOrigin = jsBase.getString("placeOfOrigin");
+            String description = jsBase.getString("description");
+            String image = jsBase.getString("image");
+
             ArrayList<String> aliasList = new ArrayList<>();
-            for(int i = 0;i<jsAlias.length();i++){
+            for (int i = 0; i < jsAlias.length(); i++) {
                 aliasList.add(jsAlias.getString(i));
             }
-            result.setAlsoKnownAs(aliasList);
-            result.setPlaceOfOrigin(jsBase.getString("placeOfOrigin"));
-            result.setDescription(jsBase.getString("description"));
-            result.setImage(jsBase.getString("image"));
+
             ArrayList<String> ingredientList = new ArrayList<>();
-            for(int i=0;i<jsIngredient.length();i++){
+            for (int i = 0; i < jsIngredient.length(); i++) {
                 ingredientList.add(jsIngredient.getString(i));
             }
-            result.setIngredients(ingredientList);
+
+            result = new Sandwich(mainName, aliasList, placeOfOrigin, description, image, ingredientList);
+
         } catch (JSONException e) {
-            return null;
+            e.printStackTrace();
         }
 
         return result;

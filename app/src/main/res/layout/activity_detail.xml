@@ -37,7 +37,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 android:layout_gravity="top"
-                android:background="@drawable/imageview_scrim"/>
+                android:background="@drawable/image_view_scrim" />
 
             <android.support.v7.widget.Toolbar
                 android:id="@+id/toolbar"
@@ -63,54 +63,37 @@
 
             <TextView
                 android:id="@+id/value_description"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:textSize="16sp"
+                style="@style/ValueTextView"
                 tools:text="Test Description to see how this would look" />
 
             <TextView
                 android:id="@+id/label_origin"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="@dimen/activity_horizontal_margin"
-                android:text="@string/detail_place_of_origin_label"
-                android:textStyle="bold" />
+                style="@style/LabelTextView"
+                android:text="@string/detail_place_of_origin_label" />
 
             <TextView
                 android:id="@+id/value_origin"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:textSize="16sp"
+                style="@style/ValueTextView"
                 tools:text="Test Description to see how this would look" />
 
             <TextView
                 android:id="@+id/label_ingredients"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="@dimen/activity_horizontal_margin"
-                android:text="@string/detail_ingredients_label"
-                android:textStyle="bold" />
+                style="@style/LabelTextView"
+                android:text="@string/detail_ingredients_label" />
 
             <TextView
                 android:id="@+id/value_ingredients"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:textSize="16sp"
+                style="@style/ValueTextView"
                 tools:text="Test Description to see how this would look" />
 
             <TextView
                 android:id="@+id/label_alias"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="@dimen/activity_horizontal_margin"
-                android:text="@string/detail_also_known_as_label"
-                android:textStyle="bold" />
+                style="@style/LabelTextView"
+                android:text="@string/detail_also_known_as_label" />
 
             <TextView
                 android:id="@+id/value_alias"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:textSize="16sp"
+                style="@style/ValueTextView"
                 tools:text="Test Description to see how this would look" />
         </LinearLayout>
     </android.support.v4.widget.NestedScrollView>

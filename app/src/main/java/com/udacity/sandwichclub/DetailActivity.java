@@ -14,7 +14,6 @@ import com.squareup.picasso.Picasso;
 import com.udacity.sandwichclub.model.Sandwich;
 import com.udacity.sandwichclub.utils.JsonUtils;
 
-import java.util.ArrayList;
 import java.util.List;
 
 public class DetailActivity extends AppCompatActivity {
@@ -32,6 +31,7 @@ public class DetailActivity extends AppCompatActivity {
         Intent intent = getIntent();
         if (intent == null) {
             closeOnError();
+            return;
         }
 
         int position = intent.getIntExtra(EXTRA_POSITION, DEFAULT_POSITION);
@@ -41,30 +41,26 @@ public class DetailActivity extends AppCompatActivity {
             return;
         }
 
-        String[] sandwiches = getResources().getStringArray(R.array.sandwich_details);
-        String json = sandwiches[position];
-        Sandwich sandwich = JsonUtils.parseSandwichJson(json);
+        Sandwich sandwich = loadSandwich(position);
+
         if (sandwich == null) {
-            // Sandwich data unavailable
             closeOnError();
             return;
         }
-
 
         Picasso.with(this)
                 .load(sandwich.getImage())
                 .into(ingredientsIv);
 
+        setupToolbar(sandwich.getMainName());
         populateUI(sandwich);
 
-        Toolbar toolbar = findViewById(R.id.toolbar);
-        setSupportActionBar(toolbar);
-        if (getSupportActionBar() != null)
-            getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+    }
 
-        CollapsingToolbarLayout collapsingToolbar = findViewById(R.id.collapsing_toolbar);
-        collapsingToolbar.setTitle(sandwich.getMainName());
-
+    private Sandwich loadSandwich(int position) {
+        String[] sandwiches = getResources().getStringArray(R.array.sandwich_details);
+        String json = sandwiches[position];
+        return JsonUtils.parseSandwichJson(json);
     }
 
     private void closeOnError() {
@@ -73,35 +69,58 @@ public class DetailActivity extends AppCompatActivity {
     }
 
     private void populateUI(Sandwich sandwich) {
+        //Name
         TextView description = findViewById(R.id.value_description);
         description.setText(sandwich.getDescription());
 
+        //origin
         TextView origin = findViewById(R.id.value_origin);
-        origin.setText(sandwich.getPlaceOfOrigin());
+        if (sandwich.getPlaceOfOrigin().isEmpty()) {
+            origin.setText(R.string.unknown_origin);
+        } else {
+            origin.setText(sandwich.getPlaceOfOrigin());
+        }
 
+        //ingredients
         TextView ingredients = findViewById(R.id.value_ingredients);
-        String ingredientString = joinString(sandwich.getIngredients(),", ");
-        ingredients.setText(ingredientString);
+        String ingredientString = joinString(sandwich.getIngredients());
+        if (ingredientString.length() > 1)
+            ingredients.setText(ingredientString);
+        else {
+            findViewById(R.id.label_ingredients).setVisibility(View.GONE);
+            ingredients.setVisibility(View.GONE);
+        }
 
+        //alias
         TextView alsoKnownAs = findViewById(R.id.value_alias);
-        String aliasString = joinString(sandwich.getAlsoKnownAs(),", ");
-        if(aliasString.length()>1)
-            alsoKnownAs.setText(aliasString.substring(0,aliasString.length()-2));
+        String aliasString = joinString(sandwich.getAlsoKnownAs());
+        if (aliasString.length() > 1)
+            alsoKnownAs.setText(aliasString);
         else {
             findViewById(R.id.label_alias).setVisibility(View.GONE);
             alsoKnownAs.setVisibility(View.GONE);
         }
-
     }
 
-    private String joinString(List<String> list, String seperator){
+    private String joinString(List<String> list) {
+        String separator = getString(R.string.detail_list_separator);
         StringBuilder joinedString = new StringBuilder();
-        if(list == null || list.size()==0){
+        if (list == null || list.size() == 0) {
             return "";
         }
         for (String alias : list) {
-            joinedString.append(alias).append(seperator);
+            joinedString.append(alias).append(separator);
         }
-        return joinedString.substring(0,joinedString.length()-seperator.length());
+        return joinedString.substring(0, joinedString.length() - separator.length());
+    }
+
+    private void setupToolbar(String title) {
+        Toolbar toolbar = findViewById(R.id.toolbar);
+        setSupportActionBar(toolbar);
+        if (getSupportActionBar() != null)
+            getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+
+        CollapsingToolbarLayout collapsingToolbar = findViewById(R.id.collapsing_toolbar);
+        collapsingToolbar.setTitle(title);
     }
 }
