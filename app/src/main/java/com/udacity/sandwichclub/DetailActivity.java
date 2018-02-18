@@ -48,11 +48,13 @@ public class DetailActivity extends AppCompatActivity {
             return;
         }
 
+        setupToolbar(sandwich.getMainName());
+
         Picasso.with(this)
                 .load(sandwich.getImage())
+                .error(R.drawable.no_image)
                 .into(ingredientsIv);
 
-        setupToolbar(sandwich.getMainName());
         populateUI(sandwich);
 
     }
